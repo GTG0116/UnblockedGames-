@@ -1,107 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GTG Games Hub</title>
-  <style>
-    body { margin:0; background:#0f0f1a; color:#fff; font-family:Arial, sans-serif; }
-    header { background: linear-gradient(135deg, #667eea, #764ba2); padding:2rem; text-align:center; }
-    h1 { margin:0; font-size:2.8rem; }
-    .container { max-width:1200px; margin:2rem auto; padding:0 1rem; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:1.5rem; }
-    .game { 
-      background:#1a1a2e; border-radius:12px; overflow:hidden; 
-      box-shadow:0 8px 20px rgba(0,0,0,0.5); transition:0.25s; cursor:pointer;
-      border:1px solid #334;
-    }
-    .game:hover { transform:translateY(-8px); box-shadow:0 15px 30px rgba(100,150,255,0.3); }
-    .thumb { width:100%; height:150px; background:#222; object-fit:cover; }
-    .title { padding:0.9rem; text-align:center; font-size:1.2rem; background:#16213e; }
-    .fullscreen { position:fixed; inset:0; background:#000; z-index:9999; display:none; flex-direction:column; }
-    iframe { flex:1; border:none; width:100%; height:100%; }
-    #errorMsg { color:#ff6; text-align:center; padding:1rem; font-size:1.2rem; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Unblocked Games</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #38bdf8;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; color: var(--accent-color); }
+        
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s, border 0.2s;
+            border: 2px solid transparent;
+        }
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+        .game-card h3 { margin: 10px 0; }
+        .play-btn {
+            display: inline-block;
+            background: var(--accent-color);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
 
 <header>
-  <h1>GTG GAMES</h1>
-  <p>Unblocked • Local /games/ • Test Mode</p>
+    <h1>Game Hub</h1>
+    <p>Select a game to start playing!</p>
 </header>
 
-<div class="container">
-  <div class="grid" id="gamesList"></div>
-</div>
+<main class="game-grid">
+    <div class="game-card">
+        <h3>Snake</h3>
+        <p>Classic arcade fun.</p>
+        <a href="games/snake/index.html" class="play-btn">Play Now</a>
+    </div>
 
-<div class="fullscreen" id="player">
-  <div id="errorMsg" style="display:none;">Game failed to load — check console (F12) or try direct URL: https://gtg0116.github.io/UnblockedGames/games/[game]/</div>
-  <iframe id="gameFrame" src=""></iframe>
-  <button onclick="closeGame()" style="position:absolute; top:10px; right:10px; padding:12px 20px; font-size:16px; background:#c0392b; border:none; color:white; border-radius:8px; cursor:pointer; z-index:10000;">✕ Close</button>
-</div>
+    <div class="game-card">
+        <h3>Space Run</h3>
+        <p>Avoid the asteroids.</p>
+        <a href="games/space-run/index.html" class="play-btn">Play Now</a>
+    </div>
 
-<script>
-const games = [
-  { name: 'Slope', path: 'slope' },
-  { name: 'Retro Bowl', path: 'retro-bowl' },
-  { name: '1v1.LOL', path: '1v1-lol' },
-  { name: 'Cookie Clicker', path: 'cookie-clicker' },
-  { name: 'Drift Hunters', path: 'drift-hunters' },
-  { name: 'Run 3', path: 'run-3' },
-  { name: 'Moto X3M', path: 'motox3m' },
-  { name: 'Vex 6', path: 'vex-6' },
-  { name: 'Geometry Dash Lite', path: 'geometry-dash-lite' },
-  { name: 'Subway Surfers', path: 'subway-surfers' },
-  { name: 'Basket Random', path: 'basket-random' },
-  { name: 'Smash Karts', path: 'smash-karts' },
-  // Add more ONLY if the folder exists in /games/
-  // Example: { name: 'OvO', path: 'ovo' },
-];
-
-const grid = document.getElementById('gamesList');
-
-games.forEach(game => {
-  const div = document.createElement('div');
-  div.className = 'game';
-  div.onclick = () => {
-    const url = `/games/${game.path}/index.html`;
-    console.log(`Attempting to load: ${url}`);
-    document.getElementById('gameFrame').src = url;
-    document.getElementById('player').style.display = 'flex';
-    document.getElementById('errorMsg').style.display = 'none';
-    document.title = `${game.name} - GTG`;
-  };
-
-  const img = document.createElement('img');
-  img.className = 'thumb';
-  img.src = `/games/${game.path}/thumbnail.png`;
-  img.alt = game.name;
-  img.onerror = () => { img.src = 'https://via.placeholder.com/250x150?text=' + encodeURIComponent(game.name); };
-
-  const title = document.createElement('div');
-  title.className = 'title';
-  title.textContent = game.name;
-
-  div.appendChild(img);
-  div.appendChild(title);
-  grid.appendChild(div);
-});
-
-function closeGame() {
-  document.getElementById('player').style.display = 'none';
-  document.getElementById('gameFrame').src = '';
-  document.getElementById('errorMsg').style.display = 'none';
-  document.title = 'GTG Games Hub';
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGame(); });
-
-// If iframe fails to load content
-document.getElementById('gameFrame').onerror = () => {
-  document.getElementById('errorMsg').style.display = 'block';
-  console.error('Iframe load failed for game');
-};
-</script>
+    </main>
 
 </body>
 </html>
